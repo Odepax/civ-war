@@ -8,58 +8,63 @@ This project aims for producing the same kind of game using Java.
 
 ### Specifications
 
+![](http://aygix.free.fr/down.php?path=github/Odepax/civ-war/uml-use-cases.png)
+
 The user has to be able to perform the following actions:
 
-+ Attack a building
-: With a simple _Drag & Drop_ gesture, the user moves its troops from one building to another. Right after that, the half of the troop in garrison in the _source_ building starts its course, heading for the _target_ building. Attacking an ally building reinforces its garrison.
+#### Attack a building
 
-    An assault troop can be improved with speed or strength bonuses --- see section about _modules_ below. The strength multiplier is not applied when the target is an ally building.
+With a simple _Drag & Drop_ gesture, the user moves its troops from one building to another. Right after that, the half of the troop in garrison in the _source_ building starts its course, heading for the _target_ building. Attacking an ally building reinforces its garrison.
 
-    If the whole garrison of a building is vanquished during an attack, this building is **captured** by the army whose the attacking troop belongs to.
+An assault troop can be improved with speed or strength bonuses --- see section about _modules_ below. The strength multiplier is not applied when the target is an ally building.
 
-+ Apply a module to a building
-: By a _Drag & Drop_ action, the user can apply a _module_ to a building of its choice.
+If the whole garrison of a building is vanquished during an attack, this building is **captured** by the army whose the attacking troop belongs to.
 
-    Unlike the [original game](https://www.miniclip.com/games/civilization-wars/fr/), _Civ War Java_ doesn't allow the player to cast magic spells against the enemy buildings and troops, nor to improve its own troops between each match, since the program doesn't have any memory of what happens between two matches.
+#### Apply a module to a building
 
-    The application of a _module_ is charged --- payment with game specific virtual money --- and can be performed only on an ally building.
+By a _Drag & Drop_ action, the user can apply a _module_ to a building of its choice.
 
-    A module might affect:
+Unlike the [original game](https://www.miniclip.com/games/civilization-wars/fr/), _Civ War Java_ doesn't allow the player to cast magic spells against the enemy buildings and troops, nor to improve its own troops between each match, since the program doesn't have any memory of what happens between two matches.
 
-    - A building, once only, at the moment of the application;
-    - An ally assault troop about to leave for an enemy stronghold from this building;
-    - An enemy assault troop attacking this building.
+The application of a _module_ is charged --- payment with game specific virtual money --- and can be performed only on an ally building.
 
-    A module might modify all the properties exposed by the a building or a troop, including:
+A module might affect:
 
-    - Considering an attack troop:
-        - The attack power multiplier;
-        - The speed multiplier;
-    - Considering a building:
-        - The garrison regeneration rate;
-        - The garrison capacity;
-        - The unit count of the current garrison.
+- A building, once only, at the moment of the application;
+- An ally assault troop about to leave for an enemy stronghold from this building;
+- An enemy assault troop attacking this building.
 
-    When a building is captured, all the modules applied on it are lost.
+A module might modify all the properties exposed by the a building or a troop, including:
+
+- Considering an attack troop:
+    - The attack power multiplier;
+    - The speed multiplier;
+- Considering a building:
+    - The garrison regeneration rate;
+    - The garrison capacity;
+    - The unit count of the current garrison.
+
+When a building is captured, all the modules applied on it are lost.
 
 Besides, the program performs some actions periodically:
 
-+ Birth management
-: In each building, the garrison troop regenerates itself automatically. The regeneration rate is determined independently for each building.
+#### Birth management
 
-+ Overpopulation management
-: In overpopulated buildings --- overpopulation is effective when the unit count of the garrison is greater than the building's garrison capacity ---, the garrison dies instead of regenerating itself.
+In each building, the garrison troop regenerates itself automatically. The regeneration rate is determined independently for each building.
 
-+ Wealth management
-: Depending in the controlled buildings, an army earns a certain amount of money periodically. This virtual money allows the player to buy modules in order to improve its buildings.
+#### Overpopulation management
 
-![](http://aygix.free.fr/down.php?path=github/Odepax/civ-war/uml-use-cases.png)
+In overpopulated buildings --- overpopulation is effective when the unit count of the garrison is greater than the building's garrison capacity ---, the garrison dies instead of regenerating itself.
+
+#### Wealth management
+
+Depending in the controlled buildings, an army earns a certain amount of money periodically. This virtual money allows the player to buy modules in order to improve its buildings.
 
 ## Implementation
 
 ### Further Code's Explanation
 
-When the application starts, an instance of `civwar.Application` is obtained via the Singleton pattern. This role of the application object is just to initialize a `civwar.view.MainWindow` frame, which is the starting point of the UX. This program is GUI-driven.
+When the application starts, an instance of `civwar.Application` is obtained via the Singleton pattern. The role of this application object is just to initialize a `civwar.view.MainWindow` frame, which is the starting point of the UX. This program is GUI-driven.
 
 The `civwar.model.Game` and `civwar.model.GameLoop` classes also use the Singleton pattern.
 
@@ -111,7 +116,7 @@ public void sendTroops(Building source, Building target) { // (1)
 }
 ```
 
-1. Its only function is to move troops from a building to another building, hence the `source` and `target` parameters;
+1. Its only purpose is to move troops from a building to another building, hence the `source` and `target` parameters;
 2. So what it actually does is simply to get the troop from the _source_ building...
 3. ... and put this into the _troop pool_ so it can walk to its _target_ building by itself --- actually propelled by the game loop periodical action --- like a rolling jolly monkey!
 
